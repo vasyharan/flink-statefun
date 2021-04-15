@@ -61,7 +61,7 @@ $ kubectl create -f flink-config.yaml
 $ kubectl create -f jobmanager-service.yaml
 
 # Deploy the StateFun runtime
-$ kubectl create -f jobmanager-job.yaml
+$ kubectl create -f jobmanager-application.yaml
 $ kubectl create -f taskmanager-job-deployment-yaml
 ```
 
@@ -69,7 +69,7 @@ To terminate the cluster, simply delete the deployments.
 
 ```bash
 $ kubectl delete -f taskmanager-job-deployment-yaml
-$ kubectl delete -f jobmanager-job.yaml
+$ kubectl delete -f jobmanager-application.yaml
 $ kubectl delete -f jobmanager-service.yaml
 $ kubectl delete -f flink-config.yaml
 $ kubectl delete -f application-module.yaml
@@ -168,8 +168,8 @@ data:
 {{< /details >}}
 
 {{< details "jobmanager-service.yaml" >}}
-```yaml
 `jobmanager-service.yaml`
+
 ```yaml
 apiVersion: v1
 kind: Service
@@ -222,7 +222,7 @@ spec:
   selector:
     matchLabels:
       app: statefun
-      component: jobmanager
+      component: master
   template:
     metadata:
       labels:
@@ -322,7 +322,7 @@ spec:
           volumeMounts:
             - name: flink-config-volume
               mountPath: /opt/flink/conf
-            - name: greeter-module
+            - name: application-module
               mountPath: /opt/statefun/modules/greeter
       volumes:
         - name: flink-config-volume
